@@ -13,6 +13,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val listTest = listOf(1.0,3.0,4.0,5.0,6.5)
+
+        Log.d("function output", getTestDataArray().toString())
+        Log.d("function output", averageLessThanMedian(listTest).toString())
+
         // You can test your helper functions by  calling them from onCreate() and
         // printing their output to the Log, which is visible in the LogCat:
         // eg. Log.d("function output", getTestDataArray().toString())
@@ -28,21 +33,25 @@ class MainActivity : AppCompatActivity() {
 
     // Return a list of random, sorted integers
     private fun getTestDataArray() : List<Int> {
-        val testArray = MutableList(10){ Random.nextInt()}
-        testArray.sort()
-        return testArray
+        return MutableList(10){ Random.nextInt()}.apply {
+            sort()
+        }
     }
 
     // Return true if average value in list is greater than median value, false otherwise
     private fun averageLessThanMedian(listOfNumbers: List<Double>): Boolean {
-        val avg = listOfNumbers.average()
-        val sortedList = listOfNumbers.sorted()
-        val median = if (sortedList.size % 2 == 0)
-            (sortedList[sortedList.size / 2] + sortedList[(sortedList.size - 1) / 2]) / 2
-        else
-            sortedList[sortedList.size / 2]
-
-        return avg < median
+        return listOfNumbers.sorted().run {
+            val avg = listOfNumbers.average()
+            val median = if (size % 2 == 0)
+                (get(size / 2) + get((size - 1) / 2)) / 2
+            else
+                get(size / 2)
+            //For some reason without get the median return incorrectly and I am unsure why
+            //However the average returns fine
+            Log.d("Average", avg.toString())
+            Log.d("Median", median.toString())
+            avg < median
+        }
     }
 
     // Create a view from an item in a collection, but recycle if possible (similar to an AdapterView's adapter)
